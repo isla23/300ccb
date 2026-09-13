@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import shutil
+import subprocess
 import sys
 
 try:
@@ -91,12 +92,58 @@ def install_deps():
             install_path / "libs" / "MaaAgentBinary",
             dirs_exist_ok=True,
         )
-        shutil.copytree(
-            working_dir / "deps" / "bin" / "plugins",
-            install_path / "plugins" / get_dotnet_platform_tag(),
-            dirs_exist_ok=True,
-        )
+        # plugins 目录某些 MaaFramework 发行包可能不存在，做兼容
+        plugins_src = working_dir / "deps" / "bin" / "plugins"
+        if plugins_src.exists():
+            shutil.copytree(
+                plugins_src,
+                install_path / "plugins" / get_dotnet_platform_tag(),
+                dirs_exist_ok=True,
+            )
+        else:
+            print(f"Warning: plugins directory not found: {plugins_src}, skipping.")
 
+
+def build_agent():
+    """
+    使用 PyInstaller 将 agent/main.py 打包成单文件 maa_agent.exe。
+
+    - 只在 agent/main.py 存在时构建；
+    - 已存在 agent/dist/maa_agent.exe 时跳过，避免重复构建；
+    - 构建产物位于 agent/dist/maa_agent.exe。
+    """
+    agent_dir = working_dir / "agent"
+    main_py = agent_dir / "main.py"
+
+    if not main_py.exists():
+        print("agent/main.py not found, skipping agent build.")
+        return
+
+    dist_exe = agent_dir / "dist" / "maa_agent.exe"
+    if dist_exe.exists():
+        print(f"Agent already built, skipping: {dist_exe}")
+        return
+
+    cmd = [
+        sys.executable,
+        "-m",
+        "PyInstaller",
+        "--noconfirm",
+        "--onefile",
+        "--name",
+        "maa_agent",
+        "--distpath",
+        str(agent_dir / "dist"),
+        "--workpath",
+        str(agent_dir / "build"),
+        "--specpath",
+        str(agent_dir),
+        str(main_py),
+    ]
+    print("Building agent with PyInstaller...")
+    print("  " + " ".join(cmd))
+    subprocess.check_call(cmd, cwd=str(agent_dir))
+    print(f"Agent built: {dist_exe}")
 
 
 def install_resource():
@@ -123,14 +170,12 @@ def install_resource():
 
 
 def install_chores():
-    shutil.copy2(
-        working_dir / "README.md",
-        install_path,
-    )
-    shutil.copy2(
-        working_dir / "LICENSE",
-        install_path,
-    )
+    for name in ("README.md", "LICENSE"):
+        src = working_dir / name
+        if src.exists():
+            shutil.copy2(src, install_path)
+        else:
+            print(f"Warning: {name} not found, skipping.")
 
 
 def install_agent():
@@ -143,6 +188,7 @@ def install_agent():
 
 if __name__ == "__main__":
     install_deps()
+    build_agent()
     install_resource()
     install_chores()
     install_agent()
