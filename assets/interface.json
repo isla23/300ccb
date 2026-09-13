@@ -21,10 +21,8 @@
 		"en-US": "./resource_en/lang.en-US.json"
 	},
 	"agent": {
-		"child_exec": "python",
-		"child_args": [
-			"./agent/main.py"
-		]
+		"child_exec": "./agent/dist/maa_agent.exe",
+		"child_args": []
 	},
 	"task": [
 		{

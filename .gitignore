@@ -412,11 +412,12 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # VS Code files for those working on multiple tools
+# 忽略 .vscode 目录下的所有内容，但放行团队共享的配置文件
 **/.vscode/*
 .vscode/*
 !.vscode/settings.json
-# !.vscode/tasks.json
-# !.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
 

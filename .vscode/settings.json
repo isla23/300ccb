@@ -1,7 +1,9 @@
 {
 	"json.schemas": [
 		{
-			"fileMatch": ["**/interface.json"],
+			"fileMatch": [
+				"**/interface.json"
+			],
 			"url": "https://raw.githubusercontent.com/MaaXYZ/MaaFramework/main/tools/interface.schema.json"
 		},
 		{
@@ -21,11 +23,15 @@
 			"url": "/deps/tools/interface.schema.json"
 		},
 		{
-			"fileMatch": ["/install/config/maa_pi_config.json"],
+			"fileMatch": [
+				"/install/config/maa_pi_config.json"
+			],
 			"url": "/deps/tools/interface_config.schema.json"
 		}
 	],
-	"files.associations": {"**/assets/**/*.json": "jsonc"},
+	"files.associations": {
+		"**/assets/**/*.json": "jsonc"
+	},
 	"[json][jsonc]": {
 		"editor.formatOnSave": true,
 		"editor.insertSpaces": true,
@@ -38,5 +44,21 @@
 	"[markdown]": {
 		"editor.formatOnSave": true,
 		"editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
-	}
+	},
+	// 指定 jsonc 文件（interface.json 属于这种）默认用 VSCode 内置格式化器
+	"[jsonc]": {
+		"editor.defaultFormatter": "vscode.json-language-features",
+		"editor.formatOnSave": true
+	},
+	// 指定纯 json 文件也用内置格式化器
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features",
+		"editor.formatOnSave": true
+	},
+	// 不让 MAA Pipeline Formatter 接管这两类文件
+	"files.associations": {
+		"*.json": "jsonc"
+	},
+	// 内置格式化器的行为：短数组保持单行
+	"json.format.enable": true
 }
