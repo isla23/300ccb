@@ -1,15 +1,19 @@
 {
-	"$schema": "http://json-schema.org/draft-07/schema#",
 	"name": "300",
 	"interface_version": 2,
 	"version": "v2.0.0-beta.2",
 	"controller": [
-		{"name": "模拟器", "type": "Adb"}
+		{
+			"name": "模拟器",
+			"type": "Adb"
+		}
 	],
 	"resource": [
 		{
 			"name": "官服",
-			"path": ["{PROJECT_DIR}/resource/"]
+			"path": [
+				"{PROJECT_DIR}/resource/"
+			]
 		}
 	],
 	"languages": {
@@ -18,22 +22,23 @@
 	},
 	"agent": {
 		"child_exec": "python",
-		"child_args": ["./agent/main.py"]
+		"child_args": [
+			"./agent/main.py"
+		]
 	},
 	"task": [
 		{
 			"name": "1.经验 - 13-4地图初始化",
 			"entry": "attack",
-			"check": false,
-			"repeatable": false,
-			"repeat_count": -1
+			"default_check": false
 		},
-		{"name": "300魔王", "entry": "where"},
+		{
+			"name": "300魔王",
+			"entry": "where"
+		},
 		{
 			"name": "300赛贝斯",
 			"entry": "where",
-			"repeatable": true,
-			"repeat_count": -1,
 			"option": [
 				"塞北似",
 				"房间相关",
@@ -45,13 +50,13 @@
 		{
 			"name": "人机",
 			"entry": "where",
-			"repeatable": true,
-			"option": ["人机"]
+			"option": [
+				"人机"
+			]
 		},
 		{
 			"name": "大zc",
-			"entry": "大战场",
-			"repeatable": true
+			"entry": "大战场"
 		}
 	],
 	"option": {
@@ -172,7 +177,12 @@
 							]
 						},
 						"队长模式": {
-							"roi": [543, 292, 44, 26]
+							"roi": [
+								543,
+								292,
+								44,
+								26
+							]
 						}
 					}
 				},
