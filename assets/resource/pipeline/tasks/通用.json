@@ -1,0 +1,168 @@
+{
+	"判断": {},
+	"在主界面": {
+		"recognition": "OCR",
+		"roi": [1075, 528, 132, 39],
+		"expected": "开始战斗",
+		"action": "Click",
+		"next": [
+			"选择zc"
+		],
+		"post_delay": 1500
+	},
+	"选择jjc": {},
+	"选择zc": {
+		"recognition": "OCR",
+		"roi": [1106, 521, 106, 21],
+		"expected": "Battle",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": []
+	},
+	"点击zc匹配": {
+		"recognition": "OCR",
+		"roi": [644, 269, 116, 29],
+		"expected": "Battlefield",
+		"action": "Click",
+		"post_delay": 2000,
+		"next": [
+			"startmatch"
+		]
+	},
+	"在开始匹配": {
+		"recognition": "OCR",
+		"roi": [466, 614, 101, 50],
+		"expected": "邀请",
+		"action": "Click",
+		"target": [682, 655, 1, 1],
+		"timeout": 9999999,
+		"rate_limit": 4000,
+		"post_delay": 2000,
+		"next": [
+			"选择英雄",
+			"[JumpBack]点击jjc准备",
+			"在开始匹配"
+		]
+	},
+	"点击jjc准备": {
+		"recognition": "OCR",
+		"roi": [529, 378, 229, 146],
+		"expected": "点击准备",
+		"action": "Click",
+		"next": []
+	},
+	"选择英雄": {
+		"recognition": "ColorMatch",
+		"roi": [333, 625, 33, 35],
+		"upper": [198, 208, 213],
+		"lower": [194, 203, 208],
+		"action": "Click",
+		"target": [1034, 193, 90, 367],
+		"next": [
+			"确定选择英雄"
+		]
+	},
+	"确定选择英雄": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1090, 655, 1, 1],
+		"timeout": 999999,
+		"rate_limit": 7000,
+		"post_delay": 5000,
+		"next": []
+	},
+	"在局内": {
+		"recognition": "TemplateMatch",
+		"roi": [249, 0, 114, 128],
+		"template": "incombat1.png",
+		"threshold": 0.6,
+		"post_delay": 1500,
+		"next": [
+			"[JumpBack]自爆",
+			"死亡",
+			"移动"
+		]
+	},
+	"自爆": {
+		"recognition": "TemplateMatch",
+		"roi": [773, 135, 331, 311],
+		"template": "zibao.png",
+		"threshold": 0.8,
+		"action": "Click",
+		"post_delay": 9000,
+		"next": []
+	},
+	"移动": {
+		"recognition": "DirectHit",
+		"action": "LongPress",
+		"target": [390, 456, 87, 84],
+		"duration": 5000,
+		"post_delay": 6000,
+		"next": []
+	},
+	"1点击消息": {
+		"recognition": "OCR",
+		"roi": [974, 2, 23, 26],
+		"expected": ["7", "8", "9", "6"],
+		"action": "Click",
+		"target": [1217, 254, 1, 1],
+		"post_delay": 1200,
+		"next": [
+			"1所有人"
+		]
+	},
+	"1所有人": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [872, 439, 5, 16],
+		"post_delay": 1000,
+		"next": [
+			"1点击对话框"
+		]
+	},
+	"1点击对话框": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [949, 284, 41, 12],
+		"post_delay": 1000,
+		"next": [
+			"1输入",
+			"1点击对话框"
+		]
+	},
+	"1输入": {
+		"recognition": "OCR",
+		"roi": [1190, 659, 44, 28],
+		"expected": "确定",
+		"action": "InputText",
+		"input_text": "9376<color=#00FF00>4</color>9048,萌新大佬<b>战场</b>交流群欢迎,进群不定时带上分",
+		"post_delay": 1000,
+		"next": [
+			"1发送"
+		]
+	},
+	"1发送": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1197, 664, 23, 12],
+		"post_delay": 1000,
+		"next": []
+	},
+	"1noaimclick": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [682, 655, 1, 1],
+		"post_delay": 3500,
+		"next": []
+	},
+	"死亡": {
+		"max_hit": 3,
+		"recognition": "OCR",
+		"roi": [138, 522, 61, 35],
+		"expected": "战况",
+		"post_delay": 1500,
+		"next": [
+			"1点击消息"
+		]
+	}
+}

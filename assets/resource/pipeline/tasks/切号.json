@@ -1,0 +1,96 @@
+{
+	"if_报错": {
+		"recognition": "OCR",
+		"roi": [
+			603,
+			500,
+			74,
+			40
+		],
+		"expected": [
+			"确定"
+		],
+		"action": "Click",
+		"next": []
+	},
+	"同意协议": {
+		"inverse": true,
+		"recognition": "TemplateMatch",
+		"roi": [
+			332,
+			610,
+			39,
+			43
+		],
+		"template": "accept.png",
+		"action": "Click",
+		"next": []
+	},
+	"点击服务器": {
+		"recognition": "ColorMatch",
+		"roi": [
+			757,
+			556,
+			6,
+			7
+		],
+		"upper": [
+			0,
+			255,
+			121
+		],
+		"lower": [
+			0,
+			255,
+			121
+		],
+		"action": "Click",
+		"next": []
+	},
+	"切换全部服务器": {
+		"recognition": "OCR",
+		"roi": [
+			195,
+			259,
+			36,
+			36
+		],
+		"expected": [
+			"全"
+		],
+		"action": "Click",
+		"next": []
+	},
+	"识别服务器00": {
+		"recognition": "Custom",
+		"custom_recognition": "SequentialKeywordOcr",
+		"custom_recognition_param": {
+			"roi": [
+				506,
+				155,
+				512,
+				407
+			],
+			"keywords": [
+				"鹊",
+				"极"
+			],
+			"reset": false
+		},
+		"action": "Click",
+		"pre_delay": 1,
+		"post_delay": 1,
+		"next": [
+			"attack"
+		]
+	},
+	"SequentialKeywordOcrHelper": {
+		"recognition": "OCR",
+		"roi": [
+			0,
+			0,
+			0,
+			0
+		]
+	}
+}

@@ -1,0 +1,272 @@
+{
+	"where": {
+		"next": [
+			"incombat",
+			"startmatch",
+			"关闭社团界面",
+			"[JumpBack]noaimclick"
+		]
+	},
+	"close menu": {
+		"recognition": "TemplateMatch",
+		"template": "close_menu.png",
+		"action": "Click",
+		"target": [838, 655, 1, 1],
+		"next": [
+			"close menu_1"
+		]
+	},
+	"close menu_1": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": "close menu",
+		"next": []
+	},
+	"关闭社团界面": {
+		"recognition": "OCR",
+		"roi": [139, 24, 94, 34],
+		"expected": ["社", "团"],
+		"action": "Click",
+		"post_delay": 2000,
+		"next": [
+			"Clickstartbattle_1"
+		]
+	},
+	"Clickstartbattle_1": {
+		"recognition": "TemplateMatch",
+		"roi": [1007, 532, 51, 45],
+		"template": "battle.png",
+		"threshold": 0.6,
+		"action": "Click",
+		"post_delay": 1200,
+		"next": [
+			"点击战场"
+		]
+	},
+	"点击战场": {
+		"recognition": "OCR",
+		"roi": [1111, 523, 54, 20],
+		"expected": "Battle",
+		"action": "Click",
+		"post_delay": 400,
+		"next": [
+			"点击战场匹配"
+		]
+	},
+	"点击人机": {
+		"recognition": "OCR",
+		"roi": [704, 559, 72, 56],
+		"expected": "人机",
+		"action": "Click",
+		"next": [
+			"startmatch"
+		]
+	},
+	"点击战场匹配": {
+		"recognition": "OCR",
+		"roi": [644, 269, 116, 29],
+		"expected": "Battlefield",
+		"action": "Click",
+		"post_delay": 2000,
+		"next": [
+			"startmatch"
+		]
+	},
+	"swiptpright": {
+		"recognition": "DirectHit",
+		"action": "Swipe",
+		"begin": [1032, 512, 1, 1],
+		"end": [299, 517, 1, 1],
+		"duration": 400,
+		"post_delay": 500,
+		"rate_limit": 1200,
+		"next": [
+			"monstertown",
+			"swiptpright"
+		]
+	},
+	"monstertown": {
+		"recognition": "TemplateMatch",
+		"roi": [738, 655, 33, 23],
+		"template": "monstertown.png",
+		"action": "Click",
+		"next": [
+			"startmatch"
+		]
+	},
+	"startmatch": {
+		"recognition": "OCR",
+		"roi": [334, 624, 81, 31],
+		"expected": "发送",
+		"timeout": 999999,
+		"rate_limit": 3000,
+		"post_delay": 3000,
+		"next": [
+			"startmatch_action",
+			"startmatch"
+		]
+	},
+	"队长模式": {
+		"recognition": "OCR",
+		"roi": [410, 289, 45, 30],
+		"expected": ["评分"],
+		"post_delay": 4000,
+		"rate_limit": 4000,
+		"timeout": 900000,
+		"next": [
+			"startmatch_action"
+		]
+	},
+	"队员模式": {
+		"recognition": "OCR",
+		"roi": [639, 615, 120, 42],
+		"expected": ["取", "消", "准", "备"],
+		"rate_limit": 4000,
+		"post_delay": 4000,
+		"next": [
+			"choosehero_z_1",
+			"队员模式"
+		]
+	},
+	"startmatch_action": {
+		"recognition": "OCR",
+		"roi": [334, 624, 81, 31],
+		"expected": "发送",
+		"action": "Click",
+		"target": [682, 655, 1, 1],
+		"timeout": 9999999,
+		"rate_limit": 5000,
+		"post_delay": 5000,
+		"next": [
+			"choosehero_z_1",
+			"[JumpBack]点击准备",
+			"startmatch_action"
+		]
+	},
+	"点击准备": {
+		"recognition": "OCR",
+		"roi": [529, 378, 229, 146],
+		"expected": "点击准备",
+		"action": "Click",
+		"next": []
+	},
+	"choosehero": {
+		"recognition": "ColorMatch",
+		"roi": [333, 625, 33, 35],
+		"upper": [198, 208, 213],
+		"lower": [194, 203, 208],
+		"action": "Click",
+		"target": [1034, 193, 90, 367],
+		"next": [
+			"ok"
+		]
+	},
+	"ok": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1090, 655, 1, 1],
+		"timeout": 999999,
+		"rate_limit": 7000,
+		"post_delay": 5000,
+		"next": [
+			"incombat",
+			"[JumpBack]noaimclick"
+		]
+	},
+	"incombat": {
+		"recognition": "TemplateMatch",
+		"roi": [249, 0, 114, 128],
+		"template": "incombat1.png",
+		"threshold": 0.6,
+		"post_delay": 1000,
+		"next": [
+			"move"
+		]
+	},
+	"move": {
+		"recognition": "DirectHit",
+		"action": "LongPress",
+		"target": [390, 456, 87, 84],
+		"duration": 1000,
+		"post_delay": 5000,
+		"next": [
+			"where"
+		]
+	},
+	"点击消息": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1217, 254, 1, 1],
+		"post_delay": 800,
+		"next": [
+			"所有人"
+		]
+	},
+	"所有人": {
+		"recognition": "OCR",
+		"roi": [863, 416, 22, 66],
+		"expected": ["所", "有", "人"],
+		"action": "Click",
+		"target": [872, 439, 5, 16],
+		"post_delay": 1000,
+		"next": [
+			"点击对话框"
+		]
+	},
+	"点击对话框": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [949, 284, 41, 12],
+		"post_delay": 1000,
+		"next": [
+			"输入",
+			"点击对话框"
+		]
+	},
+	"输入": {
+		"recognition": "OCR",
+		"roi": [1190, 659, 44, 28],
+		"expected": "确定",
+		"action": "InputText",
+		"input_text": "9376 49048,萌新大佬战场交流群欢迎，进群免费带上分",
+		"post_delay": 500,
+		"next": [
+			"发送"
+		]
+	},
+	"发送": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1197, 664, 23, 12],
+		"post_delay": 1000,
+		"next": [
+			"where"
+		]
+	},
+	"noaimclick": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [682, 655, 1, 1],
+		"post_delay": 3500,
+		"next": []
+	},
+	"识别战果": {
+		"recognition": "OCR",
+		"roi": [511, 589, 255, 131],
+		"expected": ["继", "续", "一", "步", "回", "房", "间"],
+		"post_delay": 1000,
+		"rate_limit": 5500,
+		"next": [
+			"锚点_a",
+			"锚点_c"
+		]
+	},
+	"锚点": {
+		"anchor": "Q",
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1114, 92, 13, 11],
+		"post_delay": 10000,
+		"next": []
+	}
+}

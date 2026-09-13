@@ -1,0 +1,528 @@
+{
+	"锚点_c": {
+		"recognition": "OCR",
+		"roi": [586, 21, 112, 48],
+		"expected": ["胜利", "失败"],
+		"next": [
+			"直接返回房间"
+		]
+	},
+	"锚点_b": {
+		"recognition": "OCR",
+		"roi": [1089, 207, 28, 34],
+		"expected": "0",
+		"action": "StopTask",
+		"post_delay": 1000,
+		"next": []
+	},
+	"锚点_a": {
+		"recognition": "OCR",
+		"roi": [188, 34, 60, 39],
+		"expected": "REC",
+		"post_delay": 1000,
+		"next": [
+			"判断有神器币",
+			"判断有无器币"
+		]
+	},
+	"判断有神器币": {
+		"recognition": "OCR",
+		"roi": [871, 205, 143, 43],
+		"expected": "神器",
+		"next": [
+			"锚点_b",
+			"锚点失败_a",
+			"直接返回房间"
+		]
+	},
+	"判断有无器币": {
+		"recognition": "OCR",
+		"roi": [871, 205, 143, 43],
+		"expected": "玩家",
+		"next": [
+			"直接返回房间"
+		]
+	},
+	"锚点失败_a": {
+		"recognition": "OCR",
+		"roi": [1089, 207, 28, 34],
+		"expected": "3",
+		"next": [
+			"定义锚点同时返回房间"
+		]
+	},
+	"定义锚点同时返回房间": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [682, 655, 1, 1],
+		"post_delay": 2000,
+		"next": [
+			"if_startmatch",
+			"定义锚点同时返回房间"
+		]
+	},
+	"直接返回房间": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [682, 655, 10, 10],
+		"post_delay": 1000,
+		"next": [
+			"if_startmatch",
+			"直接返回房间"
+		]
+	},
+	"if_startmatch": {
+		"recognition": "OCR",
+		"roi": [334, 624, 81, 31],
+		"expected": "发送",
+		"action": "StopTask",
+		"next": []
+	},
+	"结束任务": {
+		"recognition": "DirectHit",
+		"action": "StopTask",
+		"next": []
+	},
+	"choosehero_z_1": {
+		"recognition": "OCR",
+		"roi": [1011, 69, 59, 29],
+		"expected": ["英雄", "英", "雄"],
+		"action": "Click",
+		"target": [975, 85, 1, 1],
+		"repeat": 2,
+		"repeat_delay": 500,
+		"pre_delay": 800,
+		"post_delay": 800,
+		"next": [
+			"choosehero_z_adc"
+		]
+	},
+	"choosehero_z_adc": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1188, 175, 10, 12],
+		"post_delay": 800,
+		"next": [
+			"choosehero_z_saibeisi"
+		]
+	},
+	"choosehero_z_saibeisi": {
+		"recognition": "TemplateMatch",
+		"roi": [634, 110, 535, 497],
+		"template": "saibeisi.png",
+		"action": "Click",
+		"post_delay": 1800,
+		"next": [
+			"saibeisi_ok"
+		]
+	},
+	"saibeisi_ok": {
+		"recognition": "OCR",
+		"roi": [718, 591, 159, 129],
+		"expected": "案",
+		"action": "Click",
+		"target": [1090, 655, 1, 1],
+		"timeout": 999999,
+		"rate_limit": 7000,
+		"post_delay": 15000,
+		"next": [
+			"if_sbs",
+			"[JumpBack]saibeisi_"
+		]
+	},
+	"if_incombat": {
+		"recognition": "OCR",
+		"only_rec": true,
+		"roi": [1145, 7, 21, 20],
+		"expected": "ps",
+		"next": [
+			"if_notpoint",
+			"if_point"
+		]
+	},
+	"choosehero_z_ap": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1183, 249, 11, 12],
+		"post_delay": 800,
+		"next": [
+			"choosehero_z_tong"
+		]
+	},
+	"choosehero_z_tong": {
+		"recognition": "TemplateMatch",
+		"roi": [634, 110, 535, 497],
+		"template": "tong.png",
+		"action": "Click",
+		"post_delay": 800,
+		"next": [
+			"saibeisi_ok"
+		]
+	},
+	"choosehero_z_tank": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1187, 489, 2, 2],
+		"post_delay": 800,
+		"next": [
+			"choosehero_z_liya"
+		]
+	},
+	"choosehero_z_liya": {
+		"recognition": "TemplateMatch",
+		"roi": [634, 110, 535, 497],
+		"template": "liya.png",
+		"action": "Click",
+		"post_delay": 800,
+		"next": [
+			"saibeisi_ok"
+		]
+	},
+	"saibeisi_": {
+		"post_delay": 6000,
+		"next": []
+	},
+	"saibeisi_skill1": {
+		"repeat": 5,
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": "ocr_zibao",
+		"repeat_delay": 8800,
+		"post_delay": 5000,
+		"next": [
+			"zibao"
+		]
+	},
+	"ocr_zibao": {
+		"recognition": "TemplateMatch",
+		"roi": [511, 629, 77, 77],
+		"template": [
+			"skill.png",
+			"liya_skill.png"
+		],
+		"post_delay": 3500,
+		"next": [
+			"[JumpBack]检查装备",
+			"saibeisi_skill1"
+		]
+	},
+	"zibao": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1023, 267, 20, 19],
+		"post_delay": 8000,
+		"next": [
+			"where"
+		]
+	},
+	"news1": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1217, 254, 1, 1],
+		"post_delay": 800,
+		"next": [
+			"news2",
+			"news3"
+		]
+	},
+	"news2": {
+		"recognition": "TemplateMatch",
+		"roi": [852, 267, 42, 37],
+		"template": "news.png",
+		"action": "Click",
+		"target": [1035, 333, 10, 10],
+		"post_delay": 3500,
+		"next": [
+			"互动道具1"
+		]
+	},
+	"news3": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [872, 283, 10, 10],
+		"post_delay": 500,
+		"next": [
+			"news2_1"
+		]
+	},
+	"news2_1": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1035, 333, 10, 10],
+		"post_delay": 5500,
+		"next": [
+			"互动道具1"
+		]
+	},
+	"互动道具1": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [610, 544, 10, 12],
+		"post_delay": 5500,
+		"next": [
+			"互动道具2"
+		]
+	},
+	"互动道具2": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [713, 544, 17, 16],
+		"post_delay": 7500,
+		"next": [
+			"zibao"
+		]
+	},
+	"if_point": {
+		"only_rec": true,
+		"recognition": "OCR",
+		"roi": [1146, 28, 39, 26],
+		"expected": "[5-9]\\d|[1-9]\\d{2,}",
+		"next": [
+			"if_zibao"
+		]
+	},
+	"if_notpoint": {
+		"only_rec": true,
+		"recognition": "OCR",
+		"roi": [1146, 28, 39, 26],
+		"expected": "^([0-9]|[1-4][0-9])$",
+		"next": [
+			"[Anchor]W"
+		]
+	},
+	"识别时间10分": {
+		"only_rec": true,
+		"recognition": "OCR",
+		"roi": [938, 6, 28, 20],
+		"expected": ["^[1-9][0-9]+$"],
+		"next": [
+			"点击设置"
+		]
+	},
+	"识别时间9分": {
+		"only_rec": true,
+		"recognition": "OCR",
+		"roi": [938, 6, 28, 20],
+		"expected": ["^09$"],
+		"next": [
+			"news1"
+		]
+	},
+	"if_ocr_zibao": {
+		"max_hit": 1,
+		"recognition": "TemplateMatch",
+		"roi": [948, 192, 175, 168],
+		"green_mask": true,
+		"template": "1.png",
+		"threshold": 0.6,
+		"next": [
+			"if_sbs",
+			"if_ly",
+			"if_tong"
+		]
+	},
+	"if_sbs": {
+		"recognition": "TemplateMatch",
+		"roi": [511, 629, 77, 77],
+		"template": [
+			"skill.png"
+		],
+		"anchor": {"W": "锚点2"},
+		"post_delay": 4000,
+		"next": [
+			"[JumpBack]检查装备",
+			"where"
+		]
+	},
+	"锚点2": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"repeat": 4,
+		"target": [935, 613, 46, 41],
+		"repeat_delay": 8800,
+		"post_delay": 2000,
+		"next": [
+			"zibao"
+		]
+	},
+	"if_ly": {
+		"recognition": "TemplateMatch",
+		"roi": [511, 629, 77, 77],
+		"template": [
+			"liya_skill.png"
+		],
+		"anchor": {"W": "锚点3"},
+		"post_delay": 4000,
+		"next": [
+			"[JumpBack]检查装备",
+			"where"
+		]
+	},
+	"锚点3": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"repeat": 2,
+		"target": [1144, 359, 44, 45],
+		"repeat_delay": 30000,
+		"post_delay": 5000,
+		"next": [
+			"zibao"
+		]
+	},
+	"if_tong": {
+		"recognition": "TemplateMatch",
+		"roi": [511, 629, 77, 77],
+		"template": [
+			"tong_skill.png"
+		],
+		"anchor": {"W": "锚点4"},
+		"post_delay": 4000,
+		"next": [
+			"where"
+		]
+	},
+	"锚点4": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"repeat": 5,
+		"target": [936, 621, 36, 22],
+		"repeat_delay": 6000,
+		"post_delay": 1000,
+		"next": [
+			"zibao"
+		]
+	},
+	"if_zibao": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": "if_ocr_zibao",
+		"post_delay": 9500,
+		"timeout": 90000,
+		"next": [
+			"识别时间9分",
+			"识别时间10分",
+			"where"
+		]
+	},
+	"检查装备": {
+		"inverse": true,
+		"recognition": "OCR",
+		"roi": [579, 679, 151, 41],
+		"expected": ["k", "K"],
+		"action": "Click",
+		"target": [1211, 28, 15, 11],
+		"post_delay": 3800,
+		"next": [
+			"是否有空位",
+			"关闭神器界面"
+		]
+	},
+	"是否有空位": {
+		"recognition": "OCR",
+		"roi": [887, 549, 84, 40],
+		"expected": ["^(0|[1-9][0-9]{0,3})$"],
+		"action": "Click",
+		"target": [225, 638, 51, 11],
+		"next": [
+			"专属"
+		]
+	},
+	"关闭神器界面": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1149, 68, 38, 20],
+		"post_delay": 1,
+		"next": []
+	},
+	"专属": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [98, 447, 14, 11],
+		"post_delay": 3000,
+		"next": [
+			"补齐神器1"
+		]
+	},
+	"物理": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"post_delay": 3500,
+		"target": [96, 245, 16, 11],
+		"next": [
+			"补齐神器21"
+		]
+	},
+	"补齐神器1": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [260, 136, 17, 12],
+		"post_delay": 1200,
+		"next": [
+			"补齐神器12"
+		]
+	},
+	"补齐神器12": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [400, 128, 21, 11],
+		"post_delay": 1200,
+		"next": [
+			"物理"
+		]
+	},
+	"补齐神器21": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [260, 136, 17, 12],
+		"post_delay": 500,
+		"next": [
+			"补齐神器2"
+		]
+	},
+	"补齐神器2": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [400, 128, 21, 11],
+		"post_delay": 500,
+		"next": [
+			"补齐神器3"
+		]
+	},
+	"补齐神器3": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [540, 132, 17, 14],
+		"post_delay": 500,
+		"next": [
+			"补齐神器4"
+		]
+	},
+	"补齐神器4": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [680, 128, 25, 16],
+		"post_delay": 500,
+		"next": [
+			"补齐神器5"
+		]
+	},
+	"补齐神器5": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [820, 128, 21, 19],
+		"post_delay": 1000,
+		"next": [
+			"保存方案"
+		]
+	},
+	"保存方案": {
+		"recognition": "OCR",
+		"roi": [223, 625, 64, 33],
+		"expected": ["确定", "确", "定", "通"],
+		"action": "Click",
+		"target": [244, 634, 24, 20],
+		"next": [
+			"关闭神器界面"
+		]
+	}
+}

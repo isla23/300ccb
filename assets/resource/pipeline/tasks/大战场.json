@@ -1,0 +1,10 @@
+{
+	"大战场": {
+		"recognition": "DirectHit",
+		"next": [
+			"在开始匹配",
+			"[JumpBack]在局内",
+			"[JumpBack]1noaimclick"
+		]
+	}
+}

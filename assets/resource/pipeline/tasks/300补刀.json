@@ -1,0 +1,41 @@
+{
+	"识别自爆": {
+		"recognition": "TemplateMatch",
+		"roi": [782, 95, 63, 62],
+		"template": "瞳.png",
+		"action": "Click",
+		"target": [1167, 390, 1, 1],
+		"next": [
+			"attack"
+		]
+	},
+	"attack": {
+		"recognition": "OCR",
+		"roi": [974, 2, 23, 26],
+		"expected": ["1", "2", "4", "5", "6", "7", "8"],
+		"action": "Click",
+		"repeat": 3,
+		"repeat_delay": 300,
+		"target": [1149, 579, 10, 10],
+		"pre_delay": 1,
+		"post_delay": 1,
+		"next": [
+			"识别时间",
+			"识别自爆",
+			"attack"
+		]
+	},
+	"识别时间": {
+		"recognition": "OCR",
+		"roi": [974, 2, 23, 26],
+		"expected": ["9", "3"],
+		"action": "LongPress",
+		"target": [422, 534, 26, 22],
+		"duration": 100,
+		"pre_delay": 1,
+		"post_delay": 1,
+		"next": [
+			"attack"
+		]
+	}
+}

@@ -1,109 +1,251 @@
 {
-    // 本文件主要定义了通用 UI 的行为和显示内容
-    // 可参考文档和示例添加更多您需要的功能
-    // 文档：https://maafw.xyz/docs/3.3-ProjectInterfaceV2
-    // 示例：https://github.com/MaaXYZ/MaaFramework/blob/main/sample/interface.json
-    "interface_version": 2,
-    "name": "MaaXXX",
-    "description": "这是一个使用 MaaFramework 创建的新项目。",
-    "contact": "QQ群: 123456789",
-    "license": "MIT",
-    "welcome": "首次使用！欢迎使用 MAA!",
-    // 填写项目地址和版本号可实现自动更新功能
-    "github": "https://github.com/MaaXYZ/MaaPracticeBoilerplate",
-    "version": "1.0.0",
-    // Mirror酱为第三方分发服务，新项目默认关闭
-    // 若有需要请联系 Mirror酱 开通，直接自行开启是无法使用的
-    // "mirrorchyan_rid": "MaaXXX",
-    // "mirrorchyan_multiplatform": true,
-    "controller": [
-        {
-            "name": "安卓端",
-            "type": "Adb",
-            "display_short_side": 720 // 默认缩放分辨率的短边长度
-        },
-        {
-            "name": "桌面端",
-            "type": "Win32",
-            "win32": {
-                "class_regex": ".*",
-                "window_regex": "Visual Studio",
-                // 截图及控制方式，请根据项目实际情况修改
-                // 文档: https://maafw.xyz/docs/2.4-ControlMethods
-                "screencap": "PrintWindow", // 截图方式
-                "mouse": "PostMessageWithCursorPos", // 鼠标控制方式
-                "keyboard": "PostMessageWithCursorPos" // 键盘控制方式
-            }
-        }
-    ],
-    "resource": [
-        {
-            "name": "官服",
-            "path": [
-                "./resource"
-            ]
-        },
-        {
-            "name": "B 服",
-            "path": [
-                "./resource"
-                // "./resource_bilibili"
-            ]
-        }
-    ],
-    // 可选的 agent 示例
-    // "agent": {
-    //     "child_exec": "python",
-    //     "child_args": [
-    //         "./agent/main.py"
-    //     ]
-    // },
-    "task": [
-        {
-            "name": "普通任务",
-            "entry": "MyTask1"
-        },
-        {
-            "name": "选项任务",
-            "entry": "MyTask2",
-            "option": [
-                "任务选项1"
-            ]
-        },
-        {
-            "name": "参数任务",
-            "entry": "MyTask3",
-            "option": [
-                "任务选项1"
-            ],
-            "pipeline_override": {}
-        },
-        {
-            "name": "自定义识别与动作示例",
-            "entry": "FindSmallestNumber"
-        }
-    ],
-    "option": {
-        "任务选项1": {
-            "type": "select",
-            "cases": [
-                {
-                    "name": "文本1",
-                    "pipeline_override": {
-                        "OcrTask": {
-                            "text": "文本1"
-                        }
-                    }
-                },
-                {
-                    "name": "文本2",
-                    "pipeline_override": {
-                        "OcrTask": {
-                            "text": "文本2"
-                        }
-                    }
-                }
-            ]
-        }
-    }
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"name": "300",
+	"interface_version": 2,
+	"version": "v2.0.0-beta.2",
+	"controller": [
+		{"name": "模拟器", "type": "Adb"}
+	],
+	"resource": [
+		{
+			"name": "官服",
+			"path": ["{PROJECT_DIR}/resource/"]
+		}
+	],
+	"languages": {
+		"zh-CN": "./resource/lang.zh-CN.json",
+		"en-US": "./resource_en/lang.en-US.json"
+	},
+	"agent": {
+		"child_exec": "python",
+		"child_args": ["./agent/main.py"]
+	},
+	"task": [
+		{
+			"name": "1.经验 - 13-4地图初始化",
+			"entry": "attack",
+			"check": false,
+			"repeatable": false,
+			"repeat_count": -1
+		},
+		{"name": "300魔王", "entry": "where"},
+		{
+			"name": "300赛贝斯",
+			"entry": "where",
+			"repeatable": true,
+			"repeat_count": -1,
+			"option": [
+				"塞北似",
+				"房间相关",
+				"是否开启活互动任务",
+				"英雄选择",
+				"是否一直释放skill"
+			]
+		},
+		{
+			"name": "人机",
+			"entry": "where",
+			"repeatable": true,
+			"option": ["人机"]
+		},
+		{
+			"name": "大zc",
+			"entry": "大战场",
+			"repeatable": true
+		}
+	],
+	"option": {
+		"塞北似": {
+			"cases": [
+				{
+					"name": "1",
+					"pipeline_override": {
+						"where": {
+							"post_delay": 3000,
+							"rate_limit": 3000,
+							"timeout": 900000,
+							"next": [
+								"if_ocr_zibao",
+								"if_incombat",
+								"startmatch",
+								"识别战果"
+							]
+						}
+					}
+				}
+			]
+		},
+		"英雄选择": {
+			"type": "select",
+			"default_case": "赛贝斯",
+			"cases": [
+				{
+					"name": "赛贝斯",
+					"pipeline_override": {}
+				},
+				{
+					"name": "莉亚",
+					"pipeline_override": {
+						"choosehero_z_1": {
+							"next": [
+								"choosehero_z_tank"
+							]
+						},
+						"saibeisi_ok": {
+							"next": [
+								"if_ly",
+								"[JumpBack]saibeisi_"
+							]
+						}
+					}
+				},
+				{
+					"name": "同",
+					"pipeline_override": {
+						"choosehero_z_1": {
+							"next": [
+								"choosehero_z_ap"
+							]
+						},
+						"saibeisi_ok": {
+							"next": [
+								"if_tong",
+								"[JumpBack]saibeisi_"
+							]
+						}
+					}
+				}
+			]
+		},
+		"是否一直释放skill": {
+			"type": "switch",
+			"default_case": "No",
+			"cases": [
+				{
+					"name": "Yes",
+					"pipeline_override": {
+						"if_incombat": {
+							"next": [
+								"识别时间9分",
+								"识别时间10分",
+								"[Anchor]W"
+							]
+						}
+					}
+				},
+				{
+					"name": "No",
+					"pipeline_override": {}
+				}
+			]
+		},
+		"房间相关": {
+			"type": "select",
+			"description": "1",
+			"default_case": "无组队",
+			"cases": [
+				{
+					"name": "无组队",
+					"description": "无",
+					"pipeline_override": {}
+				},
+				{
+					"name": "双人房主",
+					"description": "需要等待队员",
+					"pipeline_override": {
+						"startmatch": {
+							"next": [
+								"队长模式",
+								"startmatch"
+							]
+						}
+					}
+				},
+				{
+					"name": "三人房主",
+					"description": "需要等待队员",
+					"pipeline_override": {
+						"startmatch": {
+							"next": [
+								"队长模式",
+								"startmatch"
+							]
+						},
+						"队长模式": {
+							"roi": [543, 292, 44, 26]
+						}
+					}
+				},
+				{
+					"name": "队员",
+					"description": "直接识别选英雄界面",
+					"pipeline_override": {
+						"startmatch": {
+							"next": [
+								"队员模式",
+								"choosehero_z_1"
+							]
+						}
+					}
+				}
+			]
+		},
+		"是否开启活互动任务": {
+			"type": "select",
+			"default_case": "仅语音",
+			"cases": [
+				{
+					"name": "仅语音",
+					"pipeline_override": {
+						"news2": {
+							"post_delay": 5000,
+							"next": [
+								"zibao"
+							]
+						},
+						"news2_1": {
+							"post_delay": 5000,
+							"next": [
+								"zibao"
+							]
+						}
+					}
+				},
+				{
+					"name": "语音+道具",
+					"pipeline_override": {}
+				},
+				{
+					"name": "无",
+					"pipeline_override": {
+						"if_zibao": {
+							"next": [
+								"识别时间10分",
+								"where"
+							]
+						}
+					}
+				}
+			]
+		},
+		"人机": {
+			"cases": [
+				{
+					"name": "人机",
+					"pipeline_override": {
+						"Clickstartbattle_1": {
+							"next": [
+								"点击人机"
+							]
+						},
+						"move": {
+							"next": [
+								"点击设置"
+							]
+						}
+					}
+				}
+			]
+		}
+	}
 }
