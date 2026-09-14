@@ -67,13 +67,14 @@ jobs:
       is_release: ${{ steps.set_tag.outputs.is_release }}
       is_prerelease: ${{ steps.set_tag.outputs.is_prerelease }}
 
+  # ============ GUI + Agent（仅 Windows x86_64） ============
   install:
     needs: meta
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       matrix:
-        os: [win, macos, linux, android]
-        arch: [aarch64, x86_64]
+        os: [win]
+        arch: [x86_64]
       fail-fast: false
 
     steps:
@@ -92,19 +93,17 @@ jobs:
           extract: true
 
       - name: Download MFAAvalonia
-        if: matrix.os != 'android'
         id: download_mfa
         uses: robinraju/release-downloader@v1
         with:
           repository: SweetSmellFox/MFAAvalonia
-          fileName: "MFAAvalonia-*-${{ (matrix.os == 'win' && 'win') || (matrix.os == 'macos' && 'osx') || (matrix.os == 'linux' && 'linux') }}-${{ (matrix.arch == 'x86_64' && 'x64') || (matrix.arch == 'aarch64' && 'arm64') }}*"
+          fileName: "MFAAvalonia-*-win-x64*"
           latest: ${{ env.MFAA_VERSION == '' }}
           tag: ${{ env.MFAA_VERSION }}
           out-file-path: "MFA"
           extract: true
 
       - name: Clean up MFAAvalonia archive
-        if: matrix.os != 'android'
         shell: bash
         run: |
           ARCHIVE_FILE_PATH="${{ fromJson(steps.download_mfa.outputs.downloaded_files)[0] }}"
@@ -112,25 +111,19 @@ jobs:
           echo "Archive cleanup command executed for MFAAvalonia."
 
       - name: Remove built-in runtime in MFA
-        if: matrix.os != 'android'
         shell: bash
-        run: |
-          rm -rf MFA/runtimes
-      
+        run: rm -rf MFA/runtimes
+
       - name: Install
         shell: bash
         run: |
-          if [[ "${{ matrix.os }}" != "android" ]]; then
-            if [ -d "MFA" ]; then
-              echo "Copying MFA files to install directory..."
-              mkdir -p install
-              rsync -av --ignore-existing MFA/ install/
-              echo "MFA files copied successfully."
-            else
-              echo "MFA directory not found, skipping copy."
-            fi
+          if [ -d "MFA" ]; then
+            echo "Copying MFA files to install directory..."
+            mkdir -p install
+            rsync -av --ignore-existing MFA/ install/
+            echo "MFA files copied successfully."
           else
-            echo "Skipping copy MFA for Android."
+            echo "MFA directory not found, skipping copy."
           fi
 
           cd tools/
@@ -142,6 +135,41 @@ jobs:
         with:
           name: MaaXXX-${{ matrix.os }}-${{ matrix.arch }}
           path: "install"
+
+  # ============ 纯资源包 ============
+  resource:
+    needs: meta
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Use Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download OCR model
+        shell: bash
+        run: |
+          mkdir -p assets/resource/model/ocr
+          curl -L -o /tmp/ppocr_v6.zip https://download.maafw.xyz/MaaCommonAssets/OCR/ppocr_v6/ppocr_v6-small.zip
+          unzip -o /tmp/ppocr_v6.zip -d assets/resource/model/ocr/
+          ls -la assets/resource/model/ocr/
+
+      - name: Package resource
+        shell: bash
+        run: |
+          cd assets
+          zip -r ../MaaXXX-Resource-${{ needs.meta.outputs.tag }}.zip resource interface.json
+          cd ..
+          ls -la MaaXXX-Resource-*.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MaaXXX-Resource
+          path: MaaXXX-Resource-*.zip
 
   changelog:
     name: Generate changelog
@@ -160,8 +188,6 @@ jobs:
         id: git-cliff
         with:
           config: .github/cliff.toml
-          # 正式版：使用 tag-pattern 只匹配正式版标签，包含所有从上一个正式版以来的提交
-          # 预发布版：正常生成，只包含从上一个标签以来的提交
           args: >-
             -vv --latest --strip header
             ${{ needs.meta.outputs.is_prerelease == 'false' && '--tag-pattern "^v[0-9]+\\.[0-9]+\\.[0-9]+$"' || '' }}
@@ -171,7 +197,7 @@ jobs:
 
   release:
     if: ${{ needs.meta.outputs.is_release == 'true' }}
-    needs: [meta, install, changelog]
+    needs: [meta, install, resource, changelog]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -181,23 +207,25 @@ jobs:
       - run: |
           cd assets
           for f in *; do
-            (cd $f && zip -r ../$f-${{ needs.meta.outputs.tag }}.zip .)
+            if [ -d "$f" ]; then
+              (cd $f && zip -r ../$f-${{ needs.meta.outputs.tag }}.zip .)
+            fi
           done
-          
+          ls -la
+
       - uses: softprops/action-gh-release@v2
         with:
-          files: assets/*
+          files: assets/*.zip
           tag_name: ${{ needs.meta.outputs.tag }}
           body: ${{ needs.changelog.outputs.release_body }}
           draft: false
           prerelease: ${{ needs.meta.outputs.is_prerelease == 'true' }}
 
-        # Mirror酱为第三方分发服务，新项目默认关闭
-        # 若有需要请联系 Mirror酱 开通，直接自行开启是无法使用的
-        # https://mirrorchyan.com/
+      # Mirror酱为第三方分发服务，新项目默认关闭
+      # 若有需要请联系 Mirror酱 开通，直接自行开启是无法使用的
+      # https://mirrorchyan.com/
       - name: Trigger MirrorChyanUploading
         if: false
-        # if: ${{ github.repository_owner == 'MaaXYZ' }}
         shell: bash
         run: |
           gh workflow run --repo $GITHUB_REPOSITORY mirrorchyan_release.yml -f tag=${{ needs.meta.outputs.tag }}
