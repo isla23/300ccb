@@ -20,10 +20,6 @@
 		"zh-CN": "./resource/lang.zh-CN.json",
 		"en-US": "./resource_en/lang.en-US.json"
 	},
-	"agent": {
-		"child_exec": "./agent/dist/maa_agent.exe",
-		"child_args": []
-	},
 	"task": [
 		{
 			"name": "1.经验 - 13-4地图初始化",
