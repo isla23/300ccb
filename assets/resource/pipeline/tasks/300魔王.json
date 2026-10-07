@@ -1,9 +1,17 @@
 {
+	"where1": {
+		"post_delay": 3000,
+		"rate_limit": 3000,
+		"timeout": 9000000,
+		"next": [
+			"if_incombat",
+			"识别战果"
+		]
+	},
 	"where": {
 		"next": [
 			"incombat",
 			"startmatch",
-			"关闭社团界面",
 			"[JumpBack]noaimclick"
 		]
 	},
@@ -178,7 +186,8 @@
 		"roi": [249, 0, 114, 128],
 		"template": "incombat1.png",
 		"threshold": 0.6,
-		"post_delay": 1000,
+		"rate_limit": 8000,
+		"post_delay": 10000,
 		"next": [
 			"move"
 		]
@@ -253,7 +262,7 @@
 	"识别战果": {
 		"recognition": "OCR",
 		"roi": [511, 589, 255, 131],
-		"expected": ["继", "续", "一", "步", "回", "房", "间"],
+		"expected": ["继", "续", "步", "回", "房", "间"],
 		"post_delay": 1000,
 		"rate_limit": 5500,
 		"next": [

@@ -1,0 +1,254 @@
+{
+	"0_": {},
+	"0_is_": {
+		"post_delay": 6000,
+		"next": []
+	},
+	"0_rec_": {},
+	"0_ck_": {},
+	"0_reck_": {},
+	"0_where": {
+		"recognition": "DirectHit",
+		"next": [
+			"0_is_incombat",
+			"0_is_组队界面"
+		]
+	},
+	"0_is_组队界面": {
+		"only_rec": true,
+		"recognition": "OCR",
+		"roi": [334, 624, 81, 31],
+		"expected": "发送",
+		"timeout": 999999,
+		"rate_limit": 3000,
+		"next": [
+			"0_reck_点击准备",
+			"0_reck_选择英雄界面",
+			"0_rec_队长",
+			"0_is_组队界面"
+		]
+	},
+	"0_rec_队长": {
+		"recognition": "OCR",
+		"roi": [493, 624, 48, 29],
+		"expected": ["邀请"],
+		"action": "Click",
+		"target": [667, 619, 49, 36],
+		"post_delay": 3000,
+		"next": [
+			"0_reck_选择英雄界面",
+			"0_reck_点击准备",
+			"0_rec_队长"
+		]
+	},
+	"0_reck_开始匹配": {
+		"only_rec": true,
+		"recognition": "OCR",
+		"roi": [334, 624, 81, 31],
+		"expected": "发送",
+		"timeout": 9999999,
+		"rate_limit": 3000,
+		"post_delay": 3000,
+		"next": [
+			"0_reck_点击准备",
+			"0_reck_开始匹配"
+		]
+	},
+	"2点击准备": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [682, 655, 1, 1],
+		"next": []
+	},
+	"0_reck_点击准备": {
+		"recognition": "OCR",
+		"roi": [606, 48, 63, 37],
+		"expected": ["成功"],
+		"action": "Click",
+		"target": [617, 448, 47, 20],
+		"next": [
+			"0_reck_选择英雄界面",
+			"0_reck_点击准备"
+		]
+	},
+	"0_reck_选择英雄界面": {
+		"recognition": "OCR",
+		"roi": [1011, 69, 59, 29],
+		"expected": ["英雄", "英", "雄"],
+		"pre_delay": 800,
+		"post_delay": 800,
+		"next": [
+			"0_ck_选择英雄1"
+		]
+	},
+	"0_ck_选择英雄1": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1016, 138, 39, 37],
+		"post_delay": 800,
+		"next": [
+			"0_reck_确定选中",
+			"0_ck_选择英雄2"
+		]
+	},
+	"0_ck_选择英雄2": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1108, 142, 30, 32],
+		"post_delay": 800,
+		"next": [
+			"0_reck_确定选中"
+		]
+	},
+	"0_reck_确定选中": {
+		"recognition": "OCR",
+		"roi": [718, 591, 159, 129],
+		"expected": "案",
+		"action": "Click",
+		"target": [1090, 655, 1, 1],
+		"timeout": 999999,
+		"rate_limit": 7000,
+		"post_delay": 15000,
+		"next": [
+			"0_is_incombat",
+			"[JumpBack]0_is_"
+		]
+	},
+	"0_is_incombat": {
+		"recognition": "Or",
+		"any_of": [
+			{
+				"recognition": "TemplateMatch",
+				"roi": [392, 586, 218, 134],
+				"template": [
+					"skill_noaim.png"
+				]
+			},
+			{
+				"recognition": "TemplateMatch",
+				"roi": [1, 254, 142, 88],
+				"template": [
+					"incombat.png"
+				]
+			}
+		],
+		"rate_limit": 6000,
+		"post_delay": 10000,
+		"next": [
+			"0_re_自爆",
+			"0_ck_神器"
+		]
+	},
+	"0_re_自爆": {
+		"recognition": "TemplateMatch",
+		"roi": [893, 158, 264, 243],
+		"green_mask": true,
+		"template": "1.png",
+		"threshold": 0.6,
+		"post_delay": 2000,
+		"next": [
+			"0_ck_自爆"
+		]
+	},
+	"0_ck_自爆": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": "0_re_自爆",
+		"post_delay": 10000,
+		"next": [
+			"0_is_结算状态",
+			"0_ck_自爆"
+		]
+	},
+	"0_ck_神器": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1211, 28, 15, 11],
+		"post_delay": 1200,
+		"next": [
+			"0_rec_防御"
+		]
+	},
+	"0_rec_防御": {
+		"recognition": "OCR",
+		"roi": [129, 369, 25, 29],
+		"expected": ["御"],
+		"action": "Click",
+		"pre_delay": 1000,
+		"post_delay": 1200,
+		"next": [
+			"0_ck_编辑方案"
+		]
+	},
+	"0_ck_编辑方案": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [225, 638, 51, 11],
+		"post_delay": 1200,
+		"next": [
+			"0_re_保存",
+			"0_ck_编辑方案"
+		]
+	},
+	"0_re_保存": {
+		"recognition": "OCR",
+		"roi": [225, 624, 55, 33],
+		"expected": ["确定"],
+		"next": [
+			"0_rec_自爆图标"
+		]
+	},
+	"0_rec_自爆图标": {
+		"recognition": "TemplateMatch",
+		"roi": [180, 56, 799, 494],
+		"template": [
+			"1_rec_自爆图标.png"
+		],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": [
+			"0_rec_确定方案"
+		]
+	},
+	"0_rec_确定方案": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": "0_re_保存",
+		"post_delay": 800,
+		"next": [
+			"0_ck_关闭神器界面"
+		]
+	},
+	"0_ck_关闭神器界面": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1149, 68, 38, 20],
+		"post_delay": 2000,
+		"next": [
+			"0_re_自爆"
+		]
+	},
+	"0_is_结算状态": {
+		"recognition": "Or",
+		"any_of": [
+			{
+				"recognition": "OCR",
+				"roi": [188, 34, 60, 39],
+				"expected": "REC"
+			},
+			{
+				"recognition": "OCR",
+				"roi": [586, 21, 112, 48],
+				"expected": ["胜利", "失败"]
+			}
+		],
+		"action": "Click",
+		"target": [682, 655, 10, 10],
+		"rate_limit": 5000,
+		"post_delay": 4000,
+		"next": [
+			"0_is_组队界面",
+			"0_is_结算状态"
+		]
+	}
+}
