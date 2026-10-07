@@ -1,42 +1,46 @@
 {
+	"$schema": "http://json-schema.org/draft-07/schema#",
 	"name": "300",
 	"interface_version": 2,
-	"version": "v2.0.0-beta.2",
+	"version": "v1.0.0-ci.609-g6f6384d",
 	"controller": [
-		{
-			"name": "模拟器",
-			"type": "Adb"
-		}
+		{"name": "模拟器", "type": "Adb"}
 	],
 	"resource": [
 		{
 			"name": "官服",
-			"path": [
-				"{PROJECT_DIR}/resource/"
-			]
+			"path": ["resource"]
 		}
 	],
 	"languages": {
 		"zh-CN": "./resource/lang.zh-CN.json",
 		"en-US": "./resource_en/lang.en-US.json"
 	},
-	"agent": {
-		"child_exec": "./agent/dist/maa_agent.exe",
-		"child_args": []
-	},
 	"task": [
 		{
 			"name": "1.经验 - 13-4地图初始化",
 			"entry": "attack",
-			"default_check": false
+			"check": false,
+			"repeatable": false,
+			"repeat_count": -1
+		},
+		{
+			"name": "幻境/自爆",
+			"entry": "0_where",
+			"repeatable": true,
+			"repeat_count": -1
 		},
 		{
 			"name": "300魔王",
-			"entry": "where"
+			"entry": "where",
+			"repeatable": true,
+			"repeat_count": -1
 		},
 		{
 			"name": "300赛贝斯",
 			"entry": "where",
+			"repeatable": true,
+			"repeat_count": -1,
 			"option": [
 				"塞北似",
 				"房间相关",
@@ -48,13 +52,13 @@
 		{
 			"name": "人机",
 			"entry": "where",
-			"option": [
-				"人机"
-			]
+			"repeatable": true,
+			"option": ["人机"]
 		},
 		{
 			"name": "大zc",
-			"entry": "大战场"
+			"entry": "大战场",
+			"repeatable": true
 		}
 	],
 	"option": {
@@ -69,7 +73,6 @@
 							"timeout": 900000,
 							"next": [
 								"if_ocr_zibao",
-								"if_incombat",
 								"startmatch",
 								"识别战果"
 							]
@@ -93,27 +96,20 @@
 							"next": [
 								"choosehero_z_tank"
 							]
-						},
-						"saibeisi_ok": {
-							"next": [
-								"if_ly",
-								"[JumpBack]saibeisi_"
-							]
 						}
 					}
 				},
 				{
-					"name": "同",
+					"name": "其他，吃助攻",
 					"pipeline_override": {
 						"choosehero_z_1": {
 							"next": [
-								"choosehero_z_ap"
+								"choosehero_direct"
 							]
 						},
-						"saibeisi_ok": {
+						"1_rec_自爆图标": {
 							"next": [
-								"if_tong",
-								"[JumpBack]saibeisi_"
+								"1_rec_眼图标"
 							]
 						}
 					}
@@ -127,11 +123,11 @@
 				{
 					"name": "Yes",
 					"pipeline_override": {
-						"if_incombat": {
+						"回城": {
 							"next": [
-								"识别时间9分",
 								"识别时间10分",
-								"[Anchor]W"
+								"[Anchor]W",
+								"锚点6_蹭助攻"
 							]
 						}
 					}
@@ -175,12 +171,7 @@
 							]
 						},
 						"队长模式": {
-							"roi": [
-								543,
-								292,
-								44,
-								26
-							]
+							"roi": [543, 292, 44, 26]
 						}
 					}
 				},
@@ -236,6 +227,53 @@
 				}
 			]
 		},
+		"是否一直自爆": {
+			"type": "switch",
+			"default_case": "No",
+			"cases": [
+				{
+					"name": "Yes",
+					"pipeline_override": {
+						"choosehero_z_1": {
+							"recognition": "OCR",
+							"roi": [1011, 69, 59, 29],
+							"expected": ["英雄", "英", "雄"],
+							"action": "DoNothing",
+							"pre_delay": 800,
+							"post_delay": 800,
+							"next": [
+								"choosehero_noaim1"
+							]
+						},
+						"saibeisi_ok": {
+							"next": [
+								"if_noaim",
+								"[JumpBack]saibeisi_"
+							]
+						},
+						"if_ocr_zibao": {
+							"next": [
+								"where"
+							]
+						},
+						"if_incombat": {
+							"next": [
+								"if_zibao"
+							]
+						},
+						"if_zibao": {
+							"next": [
+								"where"
+							]
+						}
+					}
+				},
+				{
+					"name": "No",
+					"pipeline_override": {}
+				}
+			]
+		},
 		"人机": {
 			"cases": [
 				{
@@ -249,6 +287,23 @@
 						"move": {
 							"next": [
 								"点击设置"
+							]
+						},
+						"关闭设置": {
+							"next": [
+								"where"
+							]
+						},
+						"时间未到关闭设置": {
+							"next": [
+								"where"
+							]
+						},
+						"startmatch_action": {
+							"next": [
+								"choosehero",
+								"[JumpBack]点击准备",
+								"startmatch_action"
 							]
 						}
 					}
