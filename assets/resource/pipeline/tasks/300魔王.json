@@ -103,9 +103,11 @@
 		]
 	},
 	"startmatch": {
-		"recognition": "OCR",
+		"recognition": "TemplateMatch",
 		"roi": [334, 624, 81, 31],
-		"expected": "发送",
+		"template": [
+			"zc_1/开始匹配.png"
+		],
 		"timeout": 999999,
 		"rate_limit": 3000,
 		"post_delay": 3000,
@@ -115,9 +117,11 @@
 		]
 	},
 	"队长模式": {
-		"recognition": "OCR",
+		"recognition": "TemplateMatch",
 		"roi": [410, 289, 45, 30],
-		"expected": ["评分"],
+		"template": [
+			"zc_1/识别队员.png"
+		],
 		"post_delay": 4000,
 		"rate_limit": 4000,
 		"timeout": 900000,
@@ -126,9 +130,11 @@
 		]
 	},
 	"队员模式": {
-		"recognition": "OCR",
-		"roi": [639, 615, 120, 42],
-		"expected": ["取", "消", "准", "备"],
+		"recognition": "TemplateMatch",
+		"roi": [638, 622, 28, 31],
+		"template": [
+			"zc_1/队员识别.png"
+		],
 		"rate_limit": 4000,
 		"post_delay": 4000,
 		"next": [
@@ -137,18 +143,20 @@
 		]
 	},
 	"startmatch_action": {
-		"recognition": "OCR",
-		"roi": [334, 624, 81, 31],
-		"expected": "发送",
+		"recognition": "TemplateMatch",
+		"roi": [645, 624, 50, 27],
+		"template": [
+			"zc_1/startmatch_action.png"
+		],
 		"action": "Click",
-		"target": [682, 655, 1, 1],
 		"timeout": 9999999,
 		"rate_limit": 5000,
 		"post_delay": 5000,
 		"next": [
 			"choosehero_z_1",
 			"[JumpBack]点击准备",
-			"startmatch_action"
+			"startmatch_action",
+			"[JumpBack]saibeisi_"
 		]
 	},
 	"点击准备": {
@@ -190,6 +198,15 @@
 		"post_delay": 10000,
 		"next": [
 			"move"
+		]
+	},
+	"人机识别时间10分": {
+		"only_rec": true,
+		"recognition": "OCR",
+		"roi": [938, 6, 28, 20],
+		"expected": ["^[1-9][0-9]+$"],
+		"next": [
+			"点击设置"
 		]
 	},
 	"move": {
@@ -260,22 +277,27 @@
 		"next": []
 	},
 	"识别战果": {
-		"recognition": "OCR",
-		"roi": [511, 589, 255, 131],
-		"expected": ["继", "续", "步", "回", "房", "间"],
-		"post_delay": 1000,
-		"rate_limit": 5500,
+		"recognition": "Or",
+		"any_of": [
+			{
+				"recognition": "TemplateMatch",
+				"roi": [828, 107, 133, 47],
+				"template": "zc_1/识别战果1.png"
+			},
+			{
+				"recognition": "TemplateMatch",
+				"roi": [828, 107, 133, 47],
+				"template": "zc_1/识别战果2.png"
+			},
+			{
+				"recognition": "TemplateMatch",
+				"roi": [171, 338, 122, 50],
+				"template": "zc_1/识别战果4.png"
+			}
+		],
+		"post_delay": 500,
 		"next": [
-			"锚点_a",
-			"锚点_c"
+			"直接返回房间"
 		]
-	},
-	"锚点": {
-		"anchor": "Q",
-		"recognition": "DirectHit",
-		"action": "Click",
-		"target": [1114, 92, 13, 11],
-		"post_delay": 10000,
-		"next": []
 	}
 }

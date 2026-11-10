@@ -11,29 +11,79 @@
 		"recognition": "DirectHit",
 		"next": [
 			"0_is_incombat",
-			"0_is_组队界面"
+			"0_is_组队界面",
+			"大厅识别消息",
+			"[JumpBack]wait"
+		]
+	},
+	"wait": {
+		"recognition": "DirectHit",
+		"post_delay": 4000,
+		"next": []
+	},
+	"大厅识别消息": {
+		"recognition": "TemplateMatch",
+		"roi": [95, 569, 40, 33],
+		"template": "大厅消息.png",
+		"action": "Click",
+		"post_delay": 1000,
+		"next": [
+			"幻境",
+			"大厅识别消息",
+			"[JumpBack]wait"
+		]
+	},
+	"幻境": {
+		"recognition": "TemplateMatch",
+		"roi": [316, 101, 106, 473],
+		"template": "幻境.png",
+		"post_delay": 1000,
+		"action": "Click",
+		"next": [
+			"0_is_组队界面",
+			"大厅识别消息",
+			"幻境",
+			"[JumpBack]wait"
 		]
 	},
 	"0_is_组队界面": {
-		"only_rec": true,
-		"recognition": "OCR",
+		"recognition": "TemplateMatch",
 		"roi": [334, 624, 81, 31],
-		"expected": "发送",
-		"timeout": 999999,
+		"template": [
+			"zc_1/开始匹配.png"
+		],
 		"rate_limit": 3000,
+		"post_delay": 3500,
 		"next": [
 			"0_reck_点击准备",
 			"0_reck_选择英雄界面",
 			"0_rec_队长",
-			"0_is_组队界面"
+			"0_is_组队界面",
+			"大厅识别消息"
 		]
 	},
 	"0_rec_队长": {
-		"recognition": "OCR",
-		"roi": [493, 624, 48, 29],
-		"expected": ["邀请"],
+		"recognition": "TemplateMatch",
+		"roi": [645, 624, 50, 27],
+		"template": [
+			"zc_1/startmatch_action.png"
+		],
 		"action": "Click",
-		"target": [667, 619, 49, 36],
+		"post_delay": 3000,
+		"next": [
+			"0_reck_选择英雄界面",
+			"0_reck_点击准备",
+			"0_rec_队长"
+		]
+	},
+	"0_rec_队长退出": {
+		"recognition": "TemplateMatch",
+		"roi": [645, 624, 50, 27],
+		"template": [
+			"zc_1/startmatch_action.png"
+		],
+		"action": "Click",
+		"target": [799, 9, 31, 33],
 		"post_delay": 3000,
 		"next": [
 			"0_reck_选择英雄界面",
@@ -68,44 +118,61 @@
 		"target": [617, 448, 47, 20],
 		"next": [
 			"0_reck_选择英雄界面",
-			"0_reck_点击准备"
+			"0_reck_点击准备",
+			"0_is_组队界面"
 		]
 	},
 	"0_reck_选择英雄界面": {
-		"recognition": "OCR",
-		"roi": [1011, 69, 59, 29],
-		"expected": ["英雄", "英", "雄"],
+		"recognition": "TemplateMatch",
+		"roi": [934, 70, 52, 73],
+		"template": [
+			"zc_1/choosehero_z_1.png"
+		],
+		"action": "Click",
 		"pre_delay": 800,
 		"post_delay": 800,
 		"next": [
 			"0_ck_选择英雄1"
 		]
 	},
+	"0_ck_刺客": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [1176, 387, 28, 49],
+		"post_delay": 800,
+		"next": [
+			"0_reck_鱼"
+		]
+	},
+	"0_reck_鱼": {
+		"recognition": "TemplateMatch",
+		"roi": [634, 110, 535, 497],
+		"template": "鱼.png",
+		"action": "Click",
+		"post_delay": 500,
+		"next": [
+			"0_reck_确定选中",
+			"0_ck_选择英雄1"
+		]
+	},
 	"0_ck_选择英雄1": {
 		"recognition": "DirectHit",
 		"action": "Click",
-		"target": [1016, 138, 39, 37],
-		"post_delay": 800,
+		"target": [634, 110, 535, 497],
+		"post_delay": 500,
 		"next": [
 			"0_reck_确定选中",
-			"0_ck_选择英雄2"
-		]
-	},
-	"0_ck_选择英雄2": {
-		"recognition": "DirectHit",
-		"action": "Click",
-		"target": [1108, 142, 30, 32],
-		"post_delay": 800,
-		"next": [
-			"0_reck_确定选中"
+			"0_ck_选择英雄1"
 		]
 	},
 	"0_reck_确定选中": {
-		"recognition": "OCR",
-		"roi": [718, 591, 159, 129],
-		"expected": "案",
+		"recognition": "TemplateMatch",
+		"roi": [730, 648, 28, 22],
+		"template": [
+			"zc_1/saibeisi_ok.png"
+		],
 		"action": "Click",
-		"target": [1090, 655, 1, 1],
+		"target": [1090, 655, 15, 15],
 		"timeout": 999999,
 		"rate_limit": 7000,
 		"post_delay": 15000,
@@ -144,7 +211,7 @@
 		"roi": [893, 158, 264, 243],
 		"green_mask": true,
 		"template": "1.png",
-		"threshold": 0.6,
+		"threshold": 0.5,
 		"post_delay": 2000,
 		"next": [
 			"0_ck_自爆"
@@ -154,7 +221,32 @@
 		"recognition": "DirectHit",
 		"action": "Click",
 		"target": "0_re_自爆",
-		"post_delay": 10000,
+		"post_delay": 6000,
+		"next": [
+			"0_ck_移动1"
+		]
+	},
+	"0_ck_移动": {
+		"recognition": "DirectHit",
+		"action": "LongPress",
+		"target": [312, 421, 119, 38],
+		"duration": 1000,
+		"post_delay": 2000,
+		"next": [
+			"0_is_结算状态",
+			"0_ck_自爆"
+		]
+	},
+	"0_ck_移动1": {
+		"recognition": "DirectHit",
+		"action": "Swipe",
+		"begin": [312, 421, 119, 38],
+		"end": [
+			[390, 350, 92, 47],
+			[158, 298, 92, 59]
+		],
+		"duration": 800,
+		"post_delay": 2000,
 		"next": [
 			"0_is_结算状态",
 			"0_ck_自爆"
@@ -194,8 +286,10 @@
 		"recognition": "OCR",
 		"roi": [225, 624, 55, 33],
 		"expected": ["确定"],
+		"post_delay": 500,
 		"next": [
-			"0_rec_自爆图标"
+			"0_rec_自爆图标",
+			"[JumpBack]滑动"
 		]
 	},
 	"0_rec_自爆图标": {
@@ -203,6 +297,28 @@
 		"roi": [180, 56, 799, 494],
 		"template": [
 			"1_rec_自爆图标.png"
+		],
+		"action": "Click",
+		"post_delay": 1000,
+		"next": [
+			"0_rec_魔神图标",
+			"[JumpBack]滑动"
+		]
+	},
+	"滑动": {
+		"recognition": "DirectHit",
+		"action": "Swipe",
+		"begin": [949, 461, 5, 5],
+		"end": [945, 233, 5, 5],
+		"duration": 200,
+		"post_delay": 800,
+		"next": []
+	},
+	"0_rec_魔神图标": {
+		"recognition": "TemplateMatch",
+		"roi": [180, 56, 799, 494],
+		"template": [
+			"1_rec_魔神图标.png"
 		],
 		"action": "Click",
 		"post_delay": 1000,
@@ -232,23 +348,38 @@
 		"recognition": "Or",
 		"any_of": [
 			{
-				"recognition": "OCR",
-				"roi": [188, 34, 60, 39],
-				"expected": "REC"
+				"recognition": "TemplateMatch",
+				"roi": [828, 107, 133, 47],
+				"template": [
+					"zc_1/识别战果1.png",
+					"zc_1/识别战果2.png"
+				]
 			},
 			{
-				"recognition": "OCR",
-				"roi": [586, 21, 112, 48],
-				"expected": ["胜利", "失败"]
+				"recognition": "TemplateMatch",
+				"roi": [171, 338, 122, 50],
+				"template": "zc_1/识别战果4.png"
 			}
 		],
 		"action": "Click",
 		"target": [682, 655, 10, 10],
-		"rate_limit": 5000,
-		"post_delay": 4000,
+		"rate_limit": 3500,
+		"post_delay": 3500,
+		"next": [
+			"0_ck_直接返回房间"
+		]
+	},
+	"0_ck_直接返回房间": {
+		"recognition": "DirectHit",
+		"action": "Click",
+		"target": [682, 655, 10, 10],
+		"rate_limit": 4000,
+		"post_delay": 3000,
 		"next": [
 			"0_is_组队界面",
-			"0_is_结算状态"
+			"大厅识别消息",
+			"0_reck_点击准备",
+			"0_ck_直接返回房间"
 		]
 	}
 }

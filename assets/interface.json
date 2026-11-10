@@ -25,10 +25,11 @@
 			"repeat_count": -1
 		},
 		{
-			"name": "幻境/自爆",
+			"name": "幻境/自爆/dzc占位",
 			"entry": "0_where",
 			"repeatable": true,
-			"repeat_count": -1
+			"repeat_count": -1,
+			"option": ["幻境队长是否退出", "无自爆移动(占位)", "占位选择"]
 		},
 		{
 			"name": "300魔王",
@@ -56,7 +57,7 @@
 			"option": ["人机"]
 		},
 		{
-			"name": "大zc",
+			"name": "大zc占位",
 			"entry": "大战场",
 			"repeatable": true
 		}
@@ -125,7 +126,6 @@
 					"pipeline_override": {
 						"回城": {
 							"next": [
-								"识别时间10分",
 								"[Anchor]W",
 								"锚点6_蹭助攻"
 							]
@@ -197,16 +197,12 @@
 					"name": "仅语音",
 					"pipeline_override": {
 						"news2": {
-							"post_delay": 5000,
-							"next": [
-								"zibao"
-							]
+							"post_delay": 1000,
+							"next": []
 						},
 						"news2_1": {
-							"post_delay": 5000,
-							"next": [
-								"zibao"
-							]
+							"post_delay": 1000,
+							"next": []
 						}
 					}
 				},
@@ -217,11 +213,8 @@
 				{
 					"name": "无",
 					"pipeline_override": {
-						"if_zibao": {
-							"next": [
-								"识别时间10分",
-								"where"
-							]
+						"if_die": {
+							"next": []
 						}
 					}
 				}
@@ -274,6 +267,81 @@
 				}
 			]
 		},
+		"幻境队长是否退出": {
+			"type": "switch",
+			"default_case": "No",
+			"cases": [
+				{
+					"name": "Yes",
+					"pipeline_override": {
+						"0_is_组队界面": {
+							"next": [
+								"0_reck_点击准备",
+								"0_reck_选择英雄界面",
+								"0_rec_队长退出",
+								"0_is_组队界面"
+							]
+						}
+					}
+				},
+				{
+					"name": "No",
+					"pipeline_override": {}
+				}
+			]
+		},
+		"无自爆移动(占位)": {
+			"type": "switch",
+			"default_case": "No",
+			"cases": [
+				{
+					"name": "Yes",
+					"pipeline_override": {
+						"0_is_incombat": {
+							"next": [
+								"0_ck_移动1"
+							]
+						},
+						"0_ck_移动1": {
+							"post_delay": 9000,
+							"next": [
+								"0_is_结算状态",
+								"0_ck_移动1"
+							]
+						}
+					}
+				},
+				{
+					"name": "No",
+					"pipeline_override": {}
+				}
+			]
+		},
+		"占位选择": {
+			"type": "select",
+			"default_case": "鱼",
+			"cases": [
+				{
+					"name": "鱼",
+					"pipeline_override": {
+						"0_reck_选择英雄界面": {
+							"next": [
+								"0_reck_鱼",
+								"0_ck_选择英雄1"
+							]
+						}
+					}
+				},
+				{
+					"name": "莉亚",
+					"pipeline_override": {}
+				},
+				{
+					"name": "其他，吃助攻",
+					"pipeline_override": {}
+				}
+			]
+		},
 		"人机": {
 			"cases": [
 				{
@@ -284,9 +352,10 @@
 								"点击人机"
 							]
 						},
-						"move": {
+						"incombat": {
 							"next": [
-								"点击设置"
+								"人机识别时间10分",
+								"where"
 							]
 						},
 						"关闭设置": {

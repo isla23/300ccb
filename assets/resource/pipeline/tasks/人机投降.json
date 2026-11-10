@@ -23,10 +23,12 @@
 		]
 	},
 	"点击请求投降": {
-		"recognition": "OCR",
-		"roi": [132, 518, 194, 129],
-		"expected": ["请求投降"],
-		"action": "DoNothing",
+		"recognition": "TemplateMatch",
+		"roi": [187, 572, 84, 24],
+		"template": [
+			"zc_1/投降.png"
+		],
+		"action": "Click",
 		"post_delay": 2000,
 		"next": [
 			"同意"
@@ -48,7 +50,7 @@
 	"无法投降自爆": {
 		"recognition": "DirectHit",
 		"action": "Click",
-		"target": "1_ocr_zibao",
+		"target": [1009, 253, 50, 49],
 		"post_delay": 8000,
 		"next": []
 	},
@@ -75,10 +77,8 @@
 		"repeat_delay": 1000,
 		"recognition": "DirectHit",
 		"action": "Click",
-		"target": [207, 51, 12, 3],
-		"post_delay": 5000,
-		"next": [
-			"if_zibao"
-		]
+		"target": [207, 51, 12, 13],
+		"post_delay": 2000,
+		"next": []
 	}
 }
